@@ -1,0 +1,33 @@
+version: '3.6'
+services:
+
+  da-postgres:
+    image: postgres:12.3
+    container_name: da-postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${PRIMARY_DB_NAME}
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+       - pgadmin:/root/.pgadmin
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+    postgres:
+    pgadmin:
